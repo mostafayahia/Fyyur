@@ -337,8 +337,9 @@ def edit_artist(artist_id):
   if not artist:
     abort(404)
   
-  # set default values for genres
+  # set default values for genres & state
   form.genres.default = re.compile(',\s*').split(artist.genres)
+  form.state.default = artist.state
   form.process()
 
   # TODO==: populate form with fields from artist with ID <artist_id>
@@ -376,8 +377,9 @@ def edit_venue(venue_id):
   venue = Venue.query.get(venue_id)
   if not venue:
     abort(404)
-  # setting default values for genres
+  # setting default values for genres & state
   form.genres.default = re.compile(',\s*').split(venue.genres)
+  form.state.default = venue.state
   form.process()
   # TODO==: populate form with values from venue with ID <venue_id>
   return render_template('forms/edit_venue.html', form=form, venue=venue)
