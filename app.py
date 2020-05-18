@@ -216,6 +216,11 @@ def create_venue_submission():
   # TODO==: insert form data as a new Venue record in the db, instead
   # TODO==: modify data to be the data object returned from db insertion
 
+  form = VenueForm()
+  if not form.validate():
+    flash(form.errors, 'error')
+    return render_template('pages/home.html')
+
   try:
     error = False
     venue = Venue(name=request.form.get('name'), city=request.form.get('city'),
@@ -252,7 +257,6 @@ def delete_venue(venue_id):
     body = {'state': 'success'}
     db.session.commit()
   except:
-    error = True
     body = {'state': 'failed'}
     print(sys.exc_info())
     db.session.rollback()
@@ -354,6 +358,11 @@ def edit_artist_submission(artist_id):
     abort(404)
   artist_name = artist.name
 
+  form = ArtistForm()
+  if not form.validate():
+    flash(form.errors, 'error')
+    return redirect(url_for('show_artist', artist_id=artist_id))  
+
   try:
     artist.name = request.form.get('name')
     artist.city = request.form.get('city')
@@ -393,6 +402,11 @@ def edit_venue_submission(venue_id):
     abort(404)
   venue_name = venue.name
 
+  form = VenueForm()
+  if not form.validate():
+    flash(form.errors, 'error')
+    return redirect(url_for('show_venue', venue_id=venue_id))
+
   try:
     venue.name = request.form.get('name')
     venue.city = request.form.get('city')
@@ -424,6 +438,12 @@ def create_artist_submission():
   # called upon submitting the new artist listing form
   # TODO==: insert form data as a new Venue record in the db, instead
   # TODO==: modify data to be the data object returned from db insertion
+
+  form = ArtistForm()
+  if not form.validate():
+    flash(form.errors, 'error')
+    return render_template('pages/home.html')
+  
   try:
     error = False
     artist = Artist(name=request.form.get('name'), city=request.form.get('city'),
